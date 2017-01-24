@@ -1,0 +1,7 @@
+import numpy as np
+normalMean = [-5, 5]
+normalCovariance = [[20, .8], [.8, 30]]
+xy = np.random.multivariate_normal(normalMean, normalCovariance, 10)
+print xy;
+
+

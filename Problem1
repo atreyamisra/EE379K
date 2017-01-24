@@ -1,0 +1,16 @@
+#Atreya Misra Problem 1
+import matplotlib.pyplot as plt
+import numpy as np
+X = np.random.normal(-10, 5, 1000)
+Y = np.random.normal(10, 5, 1000)
+z = np.add(X, Y)
+print np.mean(z)
+print np.var(z)
+hist, bins = np.histogram(z, bins=50)
+count, bins, ignored = plt.hist(z, 50, normed=False)
+plt.show()
+
+
+
+
+

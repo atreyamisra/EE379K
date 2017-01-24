@@ -1,0 +1,9 @@
+import numpy as np
+gauss = np.random.normal(0, 5, 25000)
+mean = np.sum(gauss)/25000
+print 'Mean is ' + str(mean)
+std = (np.sum((gauss - mean)**2)/25000)**.5
+print 'Standard deviation is ' + str(std)
+
+
+

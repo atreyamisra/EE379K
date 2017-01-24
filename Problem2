@@ -1,0 +1,15 @@
+#Atreya Misra
+import numpy as np
+import matplotlib.pyplot as plt
+n = 1000
+trials = []
+for i in range(1000):
+    x = np.random.binomial(1.0, .5, n)
+    for m in range(len(x)):
+        if (x[m] == 0.0):
+            x[m] = -1.0
+    trials.insert(i, (x.sum())/n)
+#print trials
+count, bins, ignored = plt.hist(trials, 50, normed=False)
+plt.show()
+
