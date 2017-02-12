@@ -1,14 +1,16 @@
-#Atreya Misra Problem 1
-import matplotlib.pyplot as plt
+#Atreya Misra Problem 3
 import numpy as np
-X = np.random.normal(-10, 5, 1000)
-Y = np.random.normal(10, 5, 1000)
-z = np.add(X, Y)
-print np.mean(z)
-print np.var(z)
-hist, bins = np.histogram(z, bins=50)
-count, bins, ignored = plt.hist(z, 50, normed=False)
-plt.show()
+import pandas as pd
+import scipy.linalg as LA
+import matplotlib
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.image as mpimg
+from PIL import Image
+from scipy.misc import imread
+from scipy.stats import skew
+from scipy.stats.stats import pearsonr
+from sklearn.linear_model import Ridge
 
 
 
