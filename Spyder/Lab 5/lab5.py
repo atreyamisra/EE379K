@@ -22,15 +22,15 @@ from sklearn.metrics import mean_squared_error
 weekly = pd.read_csv("Weekly.csv")
 print weekly.corr() #print correlation matrix to discover most impactful corss correlations
 
-weekly.Today.hist()
-plt.title('Histogram of Todays Returns')
-plt.xlabel('Today Return Level')
-plt.ylabel('Frequency')
+#weekly.Today.hist()
+#plt.title('Histogram of Todays Returns')
+#plt.xlabel('Today Return Level')
+#plt.ylabel('Frequency')
 
 #weekly.Direction.hist()
-plt.title('Histogram of Direction')
-plt.xlabel('Today Return Level')
-plt.ylabel('Frequency')
+#plt.title('Histogram of Direction')
+#plt.xlabel('Today Return Level')
+#plt.ylabel('Frequency')
 
 #pd.crosstab(weekly.Today, weekly.Direction.astype(bool)).plot(kind='bar')
 #plt.title('Todays Return based on market direction')
@@ -157,6 +157,76 @@ CrossValidate(traind3, validated3)
 traind4 = default[0:1000]
 validated4 = default[1001:2001]
 CrossValidate(traind4, validated4)
+
+#----------------Number 6------------------------
+
+
+np.random.seed(2)
+y = np.random.normal(0, 1, 100)
+x = np.random.normal(0, 1, 100)
+
+y = x - 2 * x**2 + np.random.normal(0, 1, 100)
+
+plt.scatter(x, y)
+plt.show()
+
+
+from sklearn.cross_validation import LeaveOneOut
+for deg in range(1,5):
+    print("Degree: "+str(deg))
+    fit=np.polyfit(x,y,deg)
+    estimator=0
+    estimatorStr="y="
+    for d in range(deg,-1,-1):
+        estimator+=fit[deg-d]*x**d
+        estimatorStr+="  "+str(fit[deg-d])+"x^"+str(d)
+    
+    print(estimatorStr)
+
+    MSESum=0.0
+    loo = LeaveOneOut(100)
+    for train, test in loo:
+        fit=np.polyfit(x[train],y[train],deg)
+        estimator=0
+        for d in range(deg,-1,-1):
+            estimator+=fit[deg-d]*x[test]**d
+        MSESum+=(y[test]-estimator)**2.0
+    MSESum*=(1.0/len(y))
+    print("ERROR IS: "+ str(MSESum[0]))
+    print("STATITICAL SIGNIFICANCE:")
+    print pd.DataFrame(zip(x, fit))
+    
+
+np.random.seed(1012312)
+
+for deg in range(1,5):
+    print("Degree: "+str(deg))
+    fit=np.polyfit(x,y,deg)
+    estimator=0
+    estimatorStr="y="
+    for d in range(deg,-1,-1):
+        estimator+=fit[deg-d]*x**d
+        estimatorStr+="  "+str(fit[deg-d])+"x^"+str(d)
+    
+    #plot and show estimate using all data
+    print(estimatorStr)
+    #plt.scatter(x,estimator)
+    #plt.show()
+    
+    #Find loocv error
+    MSESum=0.0
+    loo = LeaveOneOut(100)
+    for train, test in loo:
+        fit=np.polyfit(x[train],y[train],deg)
+        estimator=0
+        for d in range(deg,-1,-1):
+            estimator+=fit[deg-d]*x[test]**d
+        MSESum+=(y[test]-estimator)**2.0
+    MSESum*=(1.0/len(y))
+    print("ERROR IS: "+ str(MSESum[0]))
+    print("STATITICAL SIGNIFICANCE:")
+    print pd.DataFrame(zip(x, fit))
+    
 
 
 
