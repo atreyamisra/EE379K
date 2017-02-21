@@ -137,7 +137,7 @@ def findBestLasso(mini,maxi,increment):
         model_lasso_test = Lasso(alpha = alphaTest).fit(X_train, y)
         score=rmse_cv(model_lasso_test).mean()
         #print score
-        #print currentMin
+        print currentMin
         if(score < currentMin):
             bestAlpha=alphaTest
             currentMin=score
@@ -146,7 +146,7 @@ bestone = findBestLasso(52550,52650,.00000001)
 print 'best lasso alpha is:'
 print bestone
 
-lassoTest(bestone)
+#lassoTest(bestone)
 
 
 #print alphas2
