@@ -18,7 +18,7 @@ from sklearn.metrics import mean_squared_error
 #from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 #from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 
-
+print "---------------------#3-------------------" 
 weekly = pd.read_csv("Weekly.csv")
 print weekly.corr() #print correlation matrix to discover most impactful corss correlations
 
@@ -95,6 +95,8 @@ print knn.score(X,y)
 
 # -------------NUMBER 5 STARTING HERE ------------------------
 
+print "---------------------#5-------------------" 
+
 default = pd.read_excel("Data/Default.xlsx")
 y1 = default.default
 X1 = default.drop(['default', 'student'], 1)
@@ -159,7 +161,7 @@ validated4 = default[1001:2001]
 CrossValidate(traind4, validated4)
 
 #----------------Number 6------------------------
-
+print "---------------------#6-------------------" 
 
 np.random.seed(2)
 y = np.random.normal(0, 1, 100)
