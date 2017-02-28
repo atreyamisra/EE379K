@@ -17,6 +17,7 @@ from sklearn.qda import QDA
 from sklearn.cluster import KMeans
 from sklearn import cross_validation
 from sklearn.metrics import mean_squared_error
+import random
 #from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 #from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 
@@ -49,6 +50,46 @@ def createConcentricRings(points, rad1, rad2, var1, var2):
     return(data)
 datapoints=createConcentricRings(100, 1, 5, 1, 1)
 
+def kMeanLoop(means):
+    converged = False
+    while not converged:
+        for i in range(0, len(copyOfPoints)):
+            dists = []
+            for j in range(0, numClusters):
+                dists.append(pythag(generatedPoints[i], means[j]))
+                # print dists
+            minIndex = np.argmin(dists)
+            (clusters[minIndex]).append(copyOfPoints[i])
+
+        # calculate centroids
+        centroids[:] = []
+        for i in range(0, numClusters):
+            thisCluster = clusters[i]
+            centroids.append([np.mean([x[0] for x in thisCluster]), np.mean([x[1] for x in thisCluster])])
+
+        diff = 0.0
+        converged = True
+        for i in range(0, numClusters):
+            diff = pythag(centroids[i], means[i])
+            # print 'Difference between mean and centroid of ' + str(i) + ': ' + str(diff)
+            if diff > threshHold:
+                converged = False
+
+        if not converged:
+            means = centroids
+
+def kMeans(generatedPoints, k):
+    means = []
+    for i in range(0, k):
+        min = 0
+        max = 10
+        potentialMean = [random.uniform(min, max), random.uniform(min, max)]
+        while potentialMean in means:
+            potentialMean = [random.uniform(min, max), random.uniform(min, max)]
+        means.append(potentialMean)
+
+    kMeanLoop(means)
+
 def makeEuclidianDistanceMatrix(data):
     distanceMatrix=np.zeros((len(data),len(data)))
     for i in range(len(data)):
@@ -57,13 +98,13 @@ def makeEuclidianDistanceMatrix(data):
             distanceMatrix[i,j]=distance
     return distanceMatrix
 
-def makeSimilarityGraph(data, option, var=1):
+def makeSimilarityGraph(data, option, var):
     if(option==0):
         print "E neighborhood graph"
         similarityGraph = makeEuclidianDistanceMatrix(data)
         for i in range(len(similarityGraph)):
             for j in range(len(similarityGraph)):
-                if(similarityGraph[i, j] < var):
+                if(similarityGraph[i, j] > var):
                     similarityGraph[i,j] = 1
                 else:
                     similarityGraph[i,j] = 0
@@ -83,5 +124,27 @@ def makeSimilarityGraph(data, option, var=1):
         print"Invalid input"
     return similarityGraph
 
-g=makeSimilarityGraph(datapoints, 0)
-print g
+def spectralCluster(simMatrix, k):
+    w = np.zeros((len(simMatrix),len(simMatrix)))
+    l = np.zeros((len(simMatrix),len(simMatrix)))
+    for i in range(len(simMatrix)):
+        sum=0.0
+        for j in range(len(simMatrix)):
+            sum+=simMatrix[j, i]
+        w[i,i]=sum
+    for i in range(len(simMatrix)):
+        for j in range(len(simMatrix)):
+            l[i,j]=w[i,j]-simMatrix[i,j]
+    values,e =np.linalg.eig(l)
+    e=e[:k]
+    y=np.transpose(e)
+    kMeans(y, k)
+
+
+    
+    
+    
+g=makeSimilarityGraph(datapoints, 0, 1)
+spectralCluster(g, 2)
+#print g
+
