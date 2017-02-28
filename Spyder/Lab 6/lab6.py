@@ -50,16 +50,16 @@ def createConcentricRings(points, rad1, rad2, var1, var2):
     return(data)
 datapoints=createConcentricRings(100, 1, 5, 1, 1)
 
-def kMeanLoop(means):
+def kMeanLoop(generatedPoints, means):
     converged = False
     while not converged:
-        for i in range(0, len(copyOfPoints)):
+        for i in range(0, len(generatedPoints)):
             dists = []
             for j in range(0, numClusters):
                 dists.append(pythag(generatedPoints[i], means[j]))
                 # print dists
             minIndex = np.argmin(dists)
-            (clusters[minIndex]).append(copyOfPoints[i])
+            (clusters[minIndex]).append(generatedPoints[i])
 
         # calculate centroids
         centroids[:] = []
@@ -78,17 +78,15 @@ def kMeanLoop(means):
         if not converged:
             means = centroids
 
+
 def kMeans(generatedPoints, k):
-    means = []
     for i in range(0, k):
-        min = 0
-        max = 10
         potentialMean = [random.uniform(min, max), random.uniform(min, max)]
-        while potentialMean in means:
-            potentialMean = [random.uniform(min, max), random.uniform(min, max)]
+#         while potentialMean in means:
+#             potentialMean = [random.uniform(min, max), random.uniform(min, max)]
         means.append(potentialMean)
 
-    kMeanLoop(means)
+    kMeanLoop(generatedPoints, means)
 
 def makeEuclidianDistanceMatrix(data):
     distanceMatrix=np.zeros((len(data),len(data)))
