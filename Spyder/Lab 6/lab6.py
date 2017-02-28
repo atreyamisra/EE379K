@@ -47,25 +47,33 @@ def createConcentricRings(points, rad1, rad2, var1, var2):
     plt.scatter(xOut,yOut, c = 'r')
     plt.show()
     return(data)
-createConcentricRings(100, 1, 5, .5, .5)
+datapoints=createConcentricRings(100, 1, 5, 1, 1)
 
-def makeSimilarityGraph(data, option, var=0):
+def makeEuclidianDistanceMatrix(data):
+    distanceMatrix=np.zeros((len(data),len(data)))
+    for i in range(len(data)):
+        for j in range(len(data)):
+            distance = ((data[i,0]-data[j,0])**2+(data[i,1]-data[j,1])**2)**.5
+            distanceMatrix[i,j]=distance
+    return distanceMatrix
+
+def makeSimilarityGraph(data, option, var=1):
     if(option==0):
         print "E neighborhood graph"
-        similarityGraph = generateEuclidianDistance(data)
+        similarityGraph = makeEuclidianDistanceMatrix(data)
         for i in range(len(similarityGraph)):
             for j in range(len(similarityGraph)):
                 if(similarityGraph[i, j] < var):
-                    similarityGraph [i, j] = 1
+                    similarityGraph[i,j] = 1
                 else:
-                    similarityGraph [i, j] = 0
+                    similarityGraph[i,j] = 0
     elif(option == 1):
         print "k-nearest neighbor graph - ignore direction"
     elif(option == 2):
-        print "k
+        print "k-nearest neighbor graph - mutual neighbors"
     elif(option == 3):
         print "The fully connected graph"
-        similarityGraph = np.zeros(len(data),len(data))
+        similarityGraph = np.zeros((len(data),len(data)))
         for i in range(len(similarityGraph)):
             for j in range(len(similarityGraph)):
                 sigma = 1
@@ -74,3 +82,6 @@ def makeSimilarityGraph(data, option, var=0):
     else:
         print"Invalid input"
     return similarityGraph
+
+g=makeSimilarityGraph(datapoints, 0)
+print g
