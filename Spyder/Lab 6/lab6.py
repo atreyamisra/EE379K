@@ -8,6 +8,7 @@ Created on Mon Feb 27 20:00:24 2017
 import numpy as np
 import pandas as pd
 import math
+from math import sqrt
 import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
@@ -48,7 +49,18 @@ def createConcentricRings(points, rad1, rad2, var1, var2):
     plt.scatter(xOut,yOut, c = 'r')
     plt.show()
     return(data)
-datapoints=createConcentricRings(100, 1, 5, 1, 1)
+
+
+min = 0
+max = 1
+means = []
+numClusters = 2
+centroids = []
+clusters = [[] for _ in range(numClusters)]
+threshHold = .1
+
+def pythag(p1, p2):
+    return sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
 def kMeanLoop(generatedPoints, means):
     converged = False
@@ -87,6 +99,27 @@ def kMeans(generatedPoints, k):
         means.append(potentialMean)
 
     kMeanLoop(generatedPoints, means)
+    
+def display():
+    colors = ['r', 'b', 'g', 'y', 'c', 'm', 'y']
+    for i in range(0, numClusters):
+        x_val = [x[0] for x in clusters[i]]
+        y_val = [y[1] for y in clusters[i]]
+
+        plt.scatter(x_val, y_val, color=colors[i], label='Cluster ' + str(i))
+
+    # x_val = [x[0] for x in means]
+    # y_val = [y[1] for y in means]
+    #
+    # plt.scatter(x_val, y_val, marker='x', label='Initial Means')
+
+    x_val = [x[0] for x in centroids]
+    y_val = [y[1] for y in centroids]
+
+    plt.scatter(x_val, y_val, marker='x', color='k', s=50, label='Final Means')
+    plt.title('Generated Points and Corresponding Clusters')
+    plt.legend()
+    plt.show()
 
 def makeEuclidianDistanceMatrix(data):
     distanceMatrix=np.zeros((len(data),len(data)))
@@ -137,11 +170,9 @@ def spectralCluster(simMatrix, k):
     e=e[:k]
     y=np.transpose(e)
     kMeans(y, k)
+    display()
 
-
-    
-    
-    
+datapoints=createConcentricRings(100, 1, 5, 1, 1)
 g=makeSimilarityGraph(datapoints, 0, 1)
 spectralCluster(g, 2)
 #print g
