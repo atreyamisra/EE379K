@@ -170,10 +170,14 @@ def spectralCluster(simMatrix, k):
     e=e[:k]
     y=np.transpose(e)
     kMeans(y, k)
+    print "SPECTRAL RESULT:"
     display()
 
-datapoints=createConcentricRings(100, 1, 5, 1, 1)
+datapoints=createConcentricRings(100, 1, 10, 1, 1)
 g=makeSimilarityGraph(datapoints, 0, 1)
 spectralCluster(g, 2)
+kMeans(g, 2)
+print "K-MEANS RESULT:"
+display()
 #print g
 
